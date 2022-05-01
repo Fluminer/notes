@@ -2,6 +2,7 @@ package com.pamihnenkov.insidetesttask.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,18 +14,22 @@ import java.util.List;
 
 @Data
 @Table("appuser")
+@NoArgsConstructor
 public class AppUser implements UserDetails {
     @Id
     private Long id;
     private String username;
     @JsonIgnore
     private String password;
-    private UserRole role;
 
+    public AppUser(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -55,5 +60,13 @@ public class AppUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
