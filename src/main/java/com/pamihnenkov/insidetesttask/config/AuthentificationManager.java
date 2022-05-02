@@ -19,24 +19,18 @@ public class AuthentificationManager implements ReactiveAuthenticationManager {
     private final JwtUtil jwtUtil;
 
     @Override
+
     public Mono<Authentication> authenticate(Authentication authentication) {
         String authToken = authentication.getCredentials().toString();
-
-        String username;
-        try{
-            username = jwtUtil.extractUsername(authToken);
-        }catch (Exception e){
-            username=null;
-            System.out.println("Предоставлен неправильный токен");
-        }
-        if (username != null && jwtUtil.validateToken(authToken)){
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username,null,List.of(new SimpleGrantedAuthority("USER")));
-            auth.setAuthenticated(true);
-            return Mono.just(auth);
-        }else {
-
-            return Mono.empty();
-
-        }
+        String username = jwtUtil.extractUsername(authToken);
+        return Mono.just(jwtUtil.validateToken(authToken))
+                .filter(valid -> valid)
+                .switchIfEmpty(Mono.empty())
+                .map(valid -> {
+                    return new UsernamePasswordAuthenticationToken(
+                            username,
+                            null,
+                            List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                });
     }
 }

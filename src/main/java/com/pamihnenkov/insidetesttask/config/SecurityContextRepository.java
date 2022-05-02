@@ -3,6 +3,7 @@ package com.pamihnenkov.insidetesttask.config;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
@@ -18,22 +19,18 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
 
     @Override
     public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
-        return Mono.empty();
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
-        String authHeader = exchange.getRequest()
-                .getHeaders()
-                .getFirst(HttpHeaders.AUTHORIZATION);
-        if (authHeader != null && authHeader.startsWith("Bearer_")) {
-            String authToken = authHeader.substring(7);
-
-            UsernamePasswordAuthenticationToken auth= new UsernamePasswordAuthenticationToken(authToken,authToken,null);
-            return authentificationManager.authenticate(auth)
-                    .map(SecurityContextImpl::new);
-        }
-
-        return Mono.empty();
+        return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
+                .filter(authHeader -> authHeader.startsWith("Bearer_"))
+                .flatMap(authHeader -> {
+                    String authToken = authHeader.substring(7);
+                    Authentication auth = new UsernamePasswordAuthenticationToken(authToken, authToken);
+                    return authentificationManager.authenticate(auth).map(SecurityContextImpl::new);
+                });
     }
+
 }
