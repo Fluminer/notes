@@ -15,13 +15,17 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class SecurityContextRepository implements ServerSecurityContextRepository {
 
-    private final AuthentificationManager authentificationManager;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+/**
+ * Checks if ServerRequest contains correct type of JWT (should starts with 'Bearer_')
+ * and tries to authenticate user.
+ */
     @Override
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
         return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
@@ -29,7 +33,7 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
                 .flatMap(authHeader -> {
                     String authToken = authHeader.substring(7);
                     Authentication auth = new UsernamePasswordAuthenticationToken(authToken, authToken);
-                    return authentificationManager.authenticate(auth).map(SecurityContextImpl::new);
+                    return authenticationManager.authenticate(auth).map(SecurityContextImpl::new);
                 });
     }
 

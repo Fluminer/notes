@@ -23,11 +23,10 @@ public class UserService implements ReactiveUserDetailsService {
     }
 
     public Mono<AppUser> saveUser(AppUser user){
-
-        return userRepo.save(new AppUser(user.getUsername(),passwordEncoder.encode(user.getPassword()),"ROLE_USER"));
+        return userRepo.save(new AppUser(user.getUsername(),passwordEncoder.encode(user.getPassword())));
     }
 
-    public Flux<AppUser> showAllUsers(){
-        return userRepo.findAll();
+    public Mono<Boolean> checkIfUsernameExists(String username){
+        return userRepo.existsByUsername(username);
     }
 }

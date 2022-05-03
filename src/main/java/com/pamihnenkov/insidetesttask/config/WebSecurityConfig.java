@@ -17,14 +17,20 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class WebSecurityConfig {
 
-    private final AuthentificationManager authentificationManager;
+    private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
 
+/**
+ * Sets default password encoder
+ */
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(11);
     }
 
+/**
+ * Configures security options. Disables httpbasic and formlogin authentication. Authorize authenticated
+ */
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity){
         return httpSecurity
@@ -37,13 +43,13 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .authenticationManager(authentificationManager)
+                .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
                     .pathMatchers(HttpMethod.OPTIONS).permitAll()
                     .pathMatchers("/auth","/favicon.ico").permitAll()
-                    .pathMatchers("/process").hasRole("USER")
-                    .anyExchange().authenticated()
+                    .pathMatchers("/process","/addUser").hasRole("USER")
+                    .anyExchange().denyAll()
                     .and()
                 .build();
     }

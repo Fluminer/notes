@@ -1,19 +1,13 @@
 package com.pamihnenkov.insidetesttask.controllers;
 
-import com.pamihnenkov.insidetesttask.config.JwtUtil;
 import com.pamihnenkov.insidetesttask.domain.Message;
 import com.pamihnenkov.insidetesttask.service.MessageService;
-import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.NumberUtils;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 
 
@@ -22,7 +16,23 @@ import reactor.core.publisher.Mono;
 public class MessageController {
 
     private final MessageService messageService;
-    private final JwtUtil jwtUtil;
+
+/**
+ * Message processing endpoint. Consumes JSON {"name":"String","message":"String"}
+ * Compares name from JSON and JWT. If they are not equals return BAD_REQUEST status code.
+ * For correct request do one of the following things:
+ * - if message starts with 'history ', tries to convert remaining part of a string to an integer number. Then
+ *      return last
+ */
+    @PostMapping(path = "/process", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER')")
+    public Mono<ResponseEntity<Object>> process(@RequestBody Message message, Authentication authentication){
+        if (!message.getName().equals(authentication.getPrincipal())) return Mono.just(ResponseEntity.badRequest().build());
+        return Mono.just(message.getMessage())
+                    .map(msg -> msg.startsWith("history ") && isInteger(msg.substring(8))
+                            ?ResponseEntity.ok(messageService.list(message.getName(),Integer.parseInt(msg.substring(8))))
+                            :ResponseEntity.ok(messageService.addOne(message)));
+    }
 
     private boolean isInteger(String string){
         try{
@@ -31,14 +41,5 @@ public class MessageController {
         }catch (NumberFormatException exception){
             return false;
         }
-    }
-
-    @PostMapping(path = "/process", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<Object>> process(@RequestBody Message message){
-
-        return Mono.just(message.getMessage())
-                    .map(msg -> msg.startsWith("history ") && isInteger(msg.substring(8))
-                            ?ResponseEntity.ok(messageService.list(message.getName(),Integer.parseInt(msg.substring(8))))
-                            :ResponseEntity.ok(messageService.addOne(message)));
     }
 }

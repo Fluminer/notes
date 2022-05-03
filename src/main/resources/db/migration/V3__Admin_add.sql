@@ -1,0 +1,1 @@
+    insert into appuser (username, password) values ('admin', '$2a$11$irXjgL1aOoyvpxuAfMifoOvywNZMReS4.tfhNqrXmHbeDwmkfVyke')

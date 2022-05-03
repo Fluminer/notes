@@ -6,11 +6,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
+/**
+ * Class for handling JWT (validate, decode, generate)
+ */
 @Component
 public class JwtUtil {
 
@@ -19,7 +19,7 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private String expirationTime;
 
-    public Claims getClaimsFromToken(String authToken){
+    private Claims getClaimsFromToken(String authToken){
         return Jwts.parserBuilder()
                 .setSigningKey(secret.getBytes())
                 .build()
@@ -38,12 +38,10 @@ public class JwtUtil {
     }
 
     public String createToken(AppUser appUser){
-        HashMap<String,Object> claims = new HashMap<>();
         Date creationDate = new Date();
         long expirationSeconds = Long.parseLong(expirationTime);
         Date expirationDate = new Date(creationDate.getTime() + expirationSeconds * 1000);
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(appUser.getUsername())
                 .setIssuedAt(creationDate)
                 .setExpiration(expirationDate)

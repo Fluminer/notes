@@ -8,7 +8,6 @@ public class AuthRequest {
     public String getName() {
         return name;
     }
-
     public String getPassword() {
         return password;
     }
