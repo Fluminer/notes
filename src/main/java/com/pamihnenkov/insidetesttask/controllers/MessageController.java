@@ -21,8 +21,9 @@ public class MessageController {
  * Message processing endpoint. Consumes JSON {"name":"String","message":"String"}
  * Compares name from JSON and JWT. If they are not equals return BAD_REQUEST status code.
  * For correct request do one of the following things:
- * - if message starts with 'history ', tries to convert remaining part of a string to an integer number. Then
- *      return last
+ * - if message starts with 'history ', tries to convert remaining part of a string to an integer "n". Then
+ *      return last "n" messages for user.
+ * - if converting to integer fails or message starts not with 'history ' stores message to database and return it as response
  */
     @PostMapping(path = "/process", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER')")
