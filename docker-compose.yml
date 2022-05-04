@@ -1,0 +1,18 @@
+version: '3'
+services:
+  db:
+    container_name: postgres
+    image: postgres:14.2-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres 
+      POSTGRES_DB: notes   
+    ports:
+      - 5432:5432  
+  app:
+    container_name: notes-app
+    image: z0dium/notes:1.0-release
+    ports: 
+      - 6789:6789
+    depends_on:
+      - db     
