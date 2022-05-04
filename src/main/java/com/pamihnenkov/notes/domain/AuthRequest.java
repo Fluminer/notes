@@ -1,19 +1,12 @@
 package com.pamihnenkov.notes.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class AuthRequest {
 
-    private String name;
-    private String password;
-
-    public String getName() {
-        return name;
-    }
-    public String getPassword() {
-        return password;
-    }
-
-    public AuthRequest(String name, String password) {
-        this.name = name;
-        this.password = password;
-    }
+    private final String name;
+    private final String password;
 }
