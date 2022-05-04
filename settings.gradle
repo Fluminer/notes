@@ -13,4 +13,4 @@ pluginManagement{
     }
 }
 
-rootProject.name = 'inside-test-task'
+rootProject.name = 'notes'

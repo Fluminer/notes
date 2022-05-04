@@ -1,6 +1,6 @@
-package com.pamihnenkov.insidetesttask.repo;
+package com.pamihnenkov.notes.repo;
 
-import com.pamihnenkov.insidetesttask.domain.Message;
+import com.pamihnenkov.notes.domain.Message;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 

@@ -1,9 +1,8 @@
-package com.pamihnenkov.insidetesttask.service;
+package com.pamihnenkov.notes.service;
 
 
-import com.pamihnenkov.insidetesttask.domain.AppUser;
-import com.pamihnenkov.insidetesttask.domain.Message;
-import com.pamihnenkov.insidetesttask.repo.MessageRepo;
+import com.pamihnenkov.notes.domain.Message;
+import com.pamihnenkov.notes.repo.MessageRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;

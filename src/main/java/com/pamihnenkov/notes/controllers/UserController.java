@@ -1,10 +1,10 @@
-package com.pamihnenkov.insidetesttask.controllers;
+package com.pamihnenkov.notes.controllers;
 
-import com.pamihnenkov.insidetesttask.config.JwtUtil;
-import com.pamihnenkov.insidetesttask.domain.AppUser;
-import com.pamihnenkov.insidetesttask.domain.AuthRequest;
-import com.pamihnenkov.insidetesttask.domain.AuthResponse;
-import com.pamihnenkov.insidetesttask.service.UserService;
+import com.pamihnenkov.notes.config.JwtUtil;
+import com.pamihnenkov.notes.domain.AppUser;
+import com.pamihnenkov.notes.domain.AuthRequest;
+import com.pamihnenkov.notes.domain.AuthResponse;
+import com.pamihnenkov.notes.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-
-import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor

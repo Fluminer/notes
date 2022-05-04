@@ -1,4 +1,4 @@
-package com.pamihnenkov.insidetesttask.domain;
+package com.pamihnenkov.notes.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.pamihnenkov.insidetesttask.config;
+package com.pamihnenkov.notes.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;

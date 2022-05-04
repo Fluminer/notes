@@ -1,6 +1,6 @@
-package com.pamihnenkov.insidetesttask.config;
+package com.pamihnenkov.notes.config;
 
-import com.pamihnenkov.insidetesttask.domain.AppUser;
+import com.pamihnenkov.notes.domain.AppUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

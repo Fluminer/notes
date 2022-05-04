@@ -1,7 +1,7 @@
-package com.pamihnenkov.insidetesttask.controllers;
+package com.pamihnenkov.notes.controllers;
 
-import com.pamihnenkov.insidetesttask.domain.Message;
-import com.pamihnenkov.insidetesttask.service.MessageService;
+import com.pamihnenkov.notes.domain.Message;
+import com.pamihnenkov.notes.service.MessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

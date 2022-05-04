@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.pamihnenkov'
-version = '0.0.1-SNAPSHOT'
+version = '1.0-release'
 sourceCompatibility = '11'
 
 configurations {
@@ -17,6 +17,11 @@ configurations {
 repositories {
 	mavenCentral()
 	maven { url 'https://repo.spring.io/milestone'}
+}
+
+jar {
+	archivesBaseName = 'notes'
+	archiveVersion = '0.1.0'
 }
 
 dependencies {

@@ -1,8 +1,8 @@
-package com.pamihnenkov.insidetesttask.controllers;
+package com.pamihnenkov.notes.controllers;
 
-import com.pamihnenkov.insidetesttask.domain.AppUser;
-import com.pamihnenkov.insidetesttask.domain.AuthRequest;
-import com.pamihnenkov.insidetesttask.service.UserService;
+import com.pamihnenkov.notes.domain.AppUser;
+import com.pamihnenkov.notes.domain.AuthRequest;
+import com.pamihnenkov.notes.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +20,10 @@ public class AdminController {
 
     private final UserService userService;
 
+/**
+ * Endpoint for adding new Users. Available only for default user - admin.
+ * Consumes JSON {"name":"String","password":"String"}
+ */
     @PostMapping(path = "/addUser", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER')")
     public Mono<ResponseEntity<Object>> process(@RequestBody AuthRequest authRequest, Authentication authentication){
