@@ -32,7 +32,7 @@ class MessageService_ShowHistory_Test {
     Message message4 = new Message(4L,username,text4);
     Message message5 = new Message(5L,anotherUsername,text5);
 
-    Flux<Message> flux = Flux.just(message1,message2,message3,message4);
+    Flux<Message> flux = Flux.just(message1,message2,message3,message4,message5);
 
     @BeforeEach
     void setUp() {
@@ -41,7 +41,7 @@ class MessageService_ShowHistory_Test {
     }
 
     @Test
-    void showHistory_lastMessageReturned() {
+    void showHistory_lastMessageReturnedForCorrectUser() {
 
         Mockito.when(messageRepo.findByName(username)).thenReturn(flux.filter(message -> message.getName().equals(username)));
         Flux<Message> userMessages = messageService.showHistory(username,1);
@@ -56,7 +56,7 @@ class MessageService_ShowHistory_Test {
     }
 
     @Test
-    void showHistory_FewLastMessageReturned() {
+    void showHistory_FewLastMessageReturnedForSameUser() {
 
         Mockito.when(messageRepo.findByName(username)).thenReturn(flux.filter(message -> message.getName().equals(username)));
         Flux<Message> userMessages = messageService.showHistory(username,2);

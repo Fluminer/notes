@@ -30,17 +30,17 @@ public class MessageController {
     public Mono<ResponseEntity<Object>> process(@RequestBody Message message, Authentication authentication){
         if (!message.getName().equals(authentication.getPrincipal())) return Mono.just(ResponseEntity.badRequest().build());
         return Mono.just(message.getMessage())
-                    .map(msg -> msg.startsWith("history ") && isInteger(msg.substring(8))
+                    .map(msg -> msg.startsWith("history ") && isPositiveInteger(msg.substring(8))
                             ?ResponseEntity.ok(messageServiceImpl.showHistory(message.getName(),Integer.parseInt(msg.substring(8))))
                             :ResponseEntity.ok(messageServiceImpl.addOne(message)));
     }
 
-    private boolean isInteger(String string){
+    private boolean isPositiveInteger(String string){
         try{
-            Integer.parseInt(string);
-            return true;
+            return Integer.parseInt(string) >= 0;
         }catch (NumberFormatException exception){
             return false;
         }
     }
 }
+

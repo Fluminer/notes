@@ -4,7 +4,7 @@ import com.pamihnenkov.notes.config.JwtUtil;
 import com.pamihnenkov.notes.domain.AppUser;
 import com.pamihnenkov.notes.domain.AuthRequest;
 import com.pamihnenkov.notes.domain.AuthResponse;
-import com.pamihnenkov.notes.service.UserService;
+import com.pamihnenkov.notes.service.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final JwtUtil jwtUtil;
 /**
  * Authorization endpoint. Consumes JSON {"name":"String","password":"String"}
@@ -25,7 +25,7 @@ public class UserController {
  */
     @PostMapping(value = "/auth",consumes = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<AuthResponse>> auth(@RequestBody AuthRequest authRequest) {
-        return userService.findByUsername(authRequest.getName()).cast(AppUser.class)
+        return userServiceImpl.findByUsername(authRequest.getName()).cast(AppUser.class)
                             .filter(user -> BCrypt.checkpw(authRequest.getPassword(),user.getPassword()))
                             .map(user -> ResponseEntity.ok(new AuthResponse(jwtUtil.createToken(user))))
                             .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));

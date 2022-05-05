@@ -2,7 +2,7 @@ package com.pamihnenkov.notes.controllers;
 
 import com.pamihnenkov.notes.domain.AppUser;
 import com.pamihnenkov.notes.domain.AuthRequest;
-import com.pamihnenkov.notes.service.UserService;
+import com.pamihnenkov.notes.service.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class AdminController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
 /**
  * Endpoint for adding new Users. Available only for default user - admin.
@@ -28,14 +28,14 @@ public class AdminController {
     @PreAuthorize("hasRole('USER')")
     public Mono<ResponseEntity<Object>> process(@RequestBody AuthRequest authRequest, Authentication authentication){
         if (!(authentication.getPrincipal().equals("admin"))) return Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
-            return userService.checkIfUsernameExists(authRequest.getName())
-                    .map(isExist->{
-                        if (isExist) {
-                            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("User " + authRequest.getName() + " already exists in system.");
-                        } else {
-                            return ResponseEntity.status(HttpStatus.CREATED)
-                                    .body(userService.saveUser(new AppUser(authRequest.getName(), authRequest.getPassword())));
-                        }
-                    });
+        return userServiceImpl.checkIfUsernameExists(authRequest.getName())
+                .map(isExist->{
+                    if (isExist) {
+                        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("User " + authRequest.getName() + " already exists in system.");
+                    } else {
+                        return ResponseEntity.status(HttpStatus.CREATED)
+                                .body(userServiceImpl.saveUser(new AppUser(authRequest.getName(), authRequest.getPassword())));
+                    }
+                });
     }
 }

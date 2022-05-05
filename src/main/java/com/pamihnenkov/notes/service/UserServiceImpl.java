@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 @AllArgsConstructor
-public class UserService implements ReactiveUserDetailsService {
+public class UserServiceImpl implements ReactiveUserDetailsService {
 
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
