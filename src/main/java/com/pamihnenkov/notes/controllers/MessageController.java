@@ -1,7 +1,7 @@
 package com.pamihnenkov.notes.controllers;
 
 import com.pamihnenkov.notes.domain.Message;
-import com.pamihnenkov.notes.service.MessageService;
+import com.pamihnenkov.notes.service.MessageServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class MessageController {
 
-    private final MessageService messageService;
+    private final MessageServiceImpl messageServiceImpl;
 
 /**
  * Message processing endpoint. Consumes JSON {"name":"String","message":"String"}
@@ -31,8 +31,8 @@ public class MessageController {
         if (!message.getName().equals(authentication.getPrincipal())) return Mono.just(ResponseEntity.badRequest().build());
         return Mono.just(message.getMessage())
                     .map(msg -> msg.startsWith("history ") && isInteger(msg.substring(8))
-                            ?ResponseEntity.ok(messageService.list(message.getName(),Integer.parseInt(msg.substring(8))))
-                            :ResponseEntity.ok(messageService.addOne(message)));
+                            ?ResponseEntity.ok(messageServiceImpl.showHistory(message.getName(),Integer.parseInt(msg.substring(8))))
+                            :ResponseEntity.ok(messageServiceImpl.addOne(message)));
     }
 
     private boolean isInteger(String string){
