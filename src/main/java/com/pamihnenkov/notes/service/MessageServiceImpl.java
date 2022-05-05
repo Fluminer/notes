@@ -17,7 +17,6 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepo messageRepo;
 
     public Flux<Message> showHistory(String userName, @Min(value = 0, message = "negative value not allowed") Integer historyCount){
-
         return  messageRepo.findByName(userName).takeLast(historyCount);
     }
 

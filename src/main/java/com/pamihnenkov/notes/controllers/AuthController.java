@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @AllArgsConstructor
-public class UserController {
+public class AuthController {
 
     private final UserServiceImpl userServiceImpl;
     private final JwtUtil jwtUtil;

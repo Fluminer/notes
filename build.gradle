@@ -44,7 +44,7 @@ dependencies {
 	runtimeOnly 'io.r2dbc:r2dbc-postgresql'
 	runtimeOnly 'org.postgresql:postgresql'
 
-
+	implementation 'io.fabric8:mockwebserver:0.2.2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.springframework.security:spring-security-test'

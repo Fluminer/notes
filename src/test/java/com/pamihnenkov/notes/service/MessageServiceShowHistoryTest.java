@@ -13,7 +13,7 @@ import reactor.test.StepVerifier;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class MessageService_ShowHistory_Test {
+class MessageServiceShowHistoryTest {
 
     MessageService messageService;
     @Mock
@@ -84,4 +84,4 @@ class MessageService_ShowHistory_Test {
                 .expectNextCount(3)
                 .verifyComplete();
     }
-}
+    }

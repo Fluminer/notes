@@ -3,6 +3,7 @@ package com.pamihnenkov.notes.controllers;
 import com.pamihnenkov.notes.domain.Message;
 import com.pamihnenkov.notes.service.MessageServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,12 +29,15 @@ public class MessageController {
     @PostMapping(path = "/process", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER')")
     public Mono<ResponseEntity<Object>> process(@RequestBody Message message, Authentication authentication){
-        if (!message.getName().equals(authentication.getPrincipal())) return Mono.just(ResponseEntity.badRequest().build());
-        return Mono.just(message.getMessage())
+        if (message.getMessage() == null || message.getName() == null) return Mono.just(ResponseEntity.unprocessableEntity().build());
+        else if (!message.getName().equals(authentication.getPrincipal())) return Mono.just(ResponseEntity.badRequest().build());
+        else return Mono.just(message.getMessage())
                     .map(msg -> msg.startsWith("history ") && isPositiveInteger(msg.substring(8))
                             ?ResponseEntity.ok(messageServiceImpl.showHistory(message.getName(),Integer.parseInt(msg.substring(8))))
-                            :ResponseEntity.ok(messageServiceImpl.addOne(message)));
+                            :ResponseEntity.ok(messageServiceImpl.addOne(message))
+                    );
     }
+
 
     private boolean isPositiveInteger(String string){
         try{
